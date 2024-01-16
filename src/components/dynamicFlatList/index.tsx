@@ -1,5 +1,13 @@
 import React from 'react';
-import {StatusBar, View, Text, FlatList, ViewToken} from 'react-native';
+import {
+  StatusBar,
+  View,
+  Text,
+  FlatList,
+  ViewToken,
+  Image,
+  Pressable,
+} from 'react-native';
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -8,17 +16,26 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Artwork} from '../../types';
 import {styles} from './styles';
+import {IMAGE_URL, IMAGE_URL_PARAMS} from '../../constants';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type DynamicFlatListProps = {
   data?: Artwork[];
+  onSelected: (id: number) => void;
 };
 
 type ItemProps = {
   item: Artwork;
   viewableItems: SharedValue<ViewToken[]>;
+  onSelected: (id: number) => void;
 };
 
-const Item = ({item, viewableItems}: ItemProps): React.ReactElement => {
+const Item = ({
+  item,
+  viewableItems,
+  onSelected,
+}: ItemProps): React.ReactElement => {
   const stylez = useAnimatedStyle(() => {
     const isVisible = Boolean(
       viewableItems.value
@@ -36,13 +53,21 @@ const Item = ({item, viewableItems}: ItemProps): React.ReactElement => {
     };
   }, []);
   return (
-    <Animated.View style={[styles.item, stylez]}>
-      <Text style={styles.artistTitle}>{item.artist_title}</Text>
-    </Animated.View>
+    <AnimatedPressable
+      style={[styles.item, stylez]}
+      onPress={() => onSelected(item.id)}>
+      <Image
+        source={{uri: `${IMAGE_URL}${item.image_id}${IMAGE_URL_PARAMS}`}}
+        style={styles.image}
+      />
+      <Text style={styles.artistTitle} numberOfLines={1} lineBreakMode="tail">
+        {item.title}
+      </Text>
+    </AnimatedPressable>
   );
 };
 
-export const DynamicFlatList = ({data}: DynamicFlatListProps) => {
+export const DynamicFlatList = ({data, onSelected}: DynamicFlatListProps) => {
   const viewableItems = useSharedValue<ViewToken[]>([]);
   return (
     <View style={styles.container}>
@@ -55,7 +80,13 @@ export const DynamicFlatList = ({data}: DynamicFlatListProps) => {
           viewableItems.value = visibleItems;
         }}
         renderItem={({item}) => {
-          return <Item item={item as Artwork} viewableItems={viewableItems} />;
+          return (
+            <Item
+              item={item as Artwork}
+              viewableItems={viewableItems}
+              onSelected={onSelected}
+            />
+          );
         }}
       />
     </View>

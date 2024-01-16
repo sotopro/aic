@@ -1,5 +1,6 @@
 export type Artwork = {
   id: number;
+  title: string;
   api_model: string;
   api_link: string;
   is_boosted: boolean;

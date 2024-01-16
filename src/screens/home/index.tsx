@@ -1,19 +1,21 @@
 import React from 'react';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import {HomeScreenProps} from '../../navigation/type';
 
 import {styles} from './styles';
 import {ActivityIndicator} from 'react-native';
 import {useFetch} from '../../hooks';
 import {ArtworksResponse} from '../../types';
-import {ARTWORKS_API} from '../../constants';
+import {ARTWORKS_API, ROUTES} from '../../constants';
 import {THEME} from '../../constants/theme';
 import {DynamicFlatList} from '../../components/dynamicFlatList';
 
-function Home({}: HomeScreenProps): React.JSX.Element {
+function Home({navigation}: HomeScreenProps): React.JSX.Element {
   const {data, error, loading} = useFetch<ArtworksResponse>(ARTWORKS_API);
 
-  console.warn({data});
+  const onSelected = (id: number) => {
+    navigation.navigate(ROUTES.DETAILS, {id});
+  };
 
   if (loading) {
     return (
@@ -26,9 +28,17 @@ function Home({}: HomeScreenProps): React.JSX.Element {
       </View>
     );
   }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text>Error</Text>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
-      <DynamicFlatList data={data?.data} />
+      <DynamicFlatList data={data?.data} onSelected={onSelected} />
     </View>
   );
 }
