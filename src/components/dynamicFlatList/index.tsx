@@ -59,6 +59,7 @@ const Item = ({
       <Image
         source={{uri: `${IMAGE_URL}${item.image_id}${IMAGE_URL_PARAMS}`}}
         style={styles.image}
+        resizeMode="cover"
       />
       <Text style={styles.artistTitle} numberOfLines={1} lineBreakMode="tail">
         {item.title}

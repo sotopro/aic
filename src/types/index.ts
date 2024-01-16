@@ -137,3 +137,7 @@ export type ArtworksResponse = {
   };
   data: Artwork[];
 };
+
+export type ArtworkResponse = {
+  data: Artwork;
+};

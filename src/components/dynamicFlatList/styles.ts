@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     padding: _spacing,
   },
   item: {
+    flex: 1,
     backgroundColor: THEME.colors.background,
     marginBottom: _spacing,
     height: _height,
