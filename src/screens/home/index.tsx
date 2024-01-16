@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {HomeScreenProps} from '../../navigation/type';
 
 import {styles} from './styles';
@@ -8,9 +8,12 @@ import {useFetch} from '../../hooks';
 import {ArtworksResponse} from '../../types';
 import {ARTWORKS_API} from '../../constants';
 import {THEME} from '../../constants/theme';
+import {DynamicFlatList} from '../../components/dynamicFlatList';
 
 function Home({}: HomeScreenProps): React.JSX.Element {
   const {data, error, loading} = useFetch<ArtworksResponse>(ARTWORKS_API);
+
+  console.warn({data});
 
   if (loading) {
     return (
@@ -25,7 +28,7 @@ function Home({}: HomeScreenProps): React.JSX.Element {
   }
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <DynamicFlatList data={data?.data} />
     </View>
   );
 }
