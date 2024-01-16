@@ -12,3 +12,5 @@ export const URLS_API = {
     limit: 10,
   },
 };
+
+export const ARTWORKS_API = `${URLS_API.base}/${URLS_API.version}/${URLS_API.artworks}`;
