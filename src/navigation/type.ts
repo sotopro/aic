@@ -3,7 +3,7 @@ import {ROUTES} from '../constants/index';
 
 export type MainNavigatorParamList = {
   Home: undefined;
-  Details: {id: number};
+  Details: {id: number; title: string};
 };
 
 export type HomeScreenProps = NativeStackScreenProps<

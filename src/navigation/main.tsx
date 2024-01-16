@@ -27,9 +27,10 @@ function MainNavigator(): React.JSX.Element {
       <Stack.Screen
         name={ROUTES.DETAILS}
         component={Details}
-        options={{
+        options={({route}) => ({
+          title: route.params.title,
           headerBackTitleVisible: false,
-        }}
+        })}
       />
     </Stack.Navigator>
   );

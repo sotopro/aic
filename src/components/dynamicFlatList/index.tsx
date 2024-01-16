@@ -22,13 +22,13 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type DynamicFlatListProps = {
   data?: Artwork[];
-  onSelected: (id: number) => void;
+  onSelected: ({id, title}: {id: number; title: string}) => void;
 };
 
 type ItemProps = {
   item: Artwork;
   viewableItems: SharedValue<ViewToken[]>;
-  onSelected: (id: number) => void;
+  onSelected: ({id, title}: {id: number; title: string}) => void;
 };
 
 const Item = ({
@@ -55,7 +55,7 @@ const Item = ({
   return (
     <AnimatedPressable
       style={[styles.item, stylez]}
-      onPress={() => onSelected(item.id)}>
+      onPress={() => onSelected({id: item.id, title: item.title})}>
       <Image
         source={{uri: `${IMAGE_URL}${item.image_id}${IMAGE_URL_PARAMS}`}}
         style={styles.image}

@@ -13,8 +13,8 @@ import {DynamicFlatList} from '../../components/dynamicFlatList';
 function Home({navigation}: HomeScreenProps): React.JSX.Element {
   const {data, error, loading} = useFetch<ArtworksResponse>(ARTWORKS_API);
 
-  const onSelected = (id: number) => {
-    navigation.navigate(ROUTES.DETAILS, {id});
+  const onSelected = ({id, title}: {id: number; title: string}) => {
+    navigation.navigate(ROUTES.DETAILS, {id, title});
   };
 
   if (loading) {
