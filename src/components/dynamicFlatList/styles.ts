@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     padding: _spacing,
   },
   item: {
-    backgroundColor: THEME.colors.secondary,
+    backgroundColor: THEME.colors.background,
     marginBottom: _spacing,
     height: _height,
     borderRadius: 16,
@@ -24,23 +24,6 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
-  },
-  itemPressed: {
-    backgroundColor: THEME.colors.secondary,
-    marginBottom: _spacing,
-    height: _height,
-    borderRadius: 16,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-    opacity: 0.5,
   },
   artistTitle: {
     position: 'absolute',
