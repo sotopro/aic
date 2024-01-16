@@ -1,9 +1,11 @@
 import React from 'react';
 import {Text, View} from 'react-native';
+import {DetailsScreenProps} from '../../navigation/type';
+import {styles} from './styles';
 
-function Details(): React.JSX.Element {
+function Details({}: DetailsScreenProps): React.JSX.Element {
   return (
-    <View>
+    <View style={styles.container}>
       <Text>Details</Text>
     </View>
   );

@@ -1,9 +1,12 @@
 import React from 'react';
 import {Text, View} from 'react-native';
+import {HomeScreenProps} from '../../navigation/type';
 
-function Home(): React.JSX.Element {
+import {styles} from './styles';
+
+function Home({}: HomeScreenProps): React.JSX.Element {
   return (
-    <View>
+    <View style={styles.container}>
       <Text>Home</Text>
     </View>
   );

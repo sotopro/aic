@@ -18,14 +18,14 @@ function MainNavigator(): React.JSX.Element {
         gestureDirection: 'horizontal',
       }}>
       <Stack.Screen
-        name="Home"
+        name={ROUTES.HOME}
         component={Home}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="Details"
+        name={ROUTES.DETAILS}
         component={Details}
         options={{
           headerBackTitleVisible: false,
