@@ -7,12 +7,13 @@
 
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import Home from './screens/home';
+import RootNavigator from './navigation';
+import 'react-native-gesture-handler';
 
 function App(): React.JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
-      <Home />
+      <RootNavigator />
     </SafeAreaView>
   );
 }
