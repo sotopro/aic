@@ -1,12 +1,21 @@
-import React from 'react';
-import {ActivityIndicator, SafeAreaView, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  Text,
+  View,
+  NativeModules,
+  Platform,
+  Alert,
+} from 'react-native';
+import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {DetailsScreenProps} from '../../navigation/type';
 import {styles} from './styles';
 import {useFetch} from '../../hooks';
 import {ARTWORKS_API, IMAGE_URL, IMAGE_URL_PARAMS} from '../../constants';
 import {ArtworkResponse} from '../../types';
 import {THEME} from '../../constants/theme';
-import {getTimestamp} from '../../functions';
+import {getTimestamp, getTimestampUTC} from '../../functions';
 import Animated, {
   FadeInUp,
   FadeIn,
@@ -15,6 +24,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Button} from '../../components';
 
+const AddCalendarEvent = NativeModules?.AddCalendarEvent;
+
+console.warn({NativeModules: NativeModules?.AddCalendarEvent});
+
 function Details({route}: DetailsScreenProps): React.JSX.Element {
   const {id} = route.params;
   const {data, error, loading} = useFetch<ArtworkResponse>(
@@ -22,6 +35,49 @@ function Details({route}: DetailsScreenProps): React.JSX.Element {
   );
 
   const {data: artistData} = data || {};
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      request(PERMISSIONS.ANDROID.READ_CALENDAR).then(result => {
+        if (result !== RESULTS.GRANTED) {
+          throw new Error(`No permission: ${result}`);
+        }
+      });
+    }
+  }, []);
+
+  const addToCalendar = () => {
+    const eventConfig = {
+      title: artistData?.title,
+      startDate: getTimestampUTC(artistData?.timestamp),
+      notes: artistData?.description,
+    };
+
+    request(
+      Platform.select({
+        ios: PERMISSIONS.IOS.CALENDARS,
+        default: PERMISSIONS.ANDROID.WRITE_CALENDAR,
+      }),
+    )
+      .then(result => {
+        if (result !== RESULTS.GRANTED) {
+          throw new Error(`No permission: ${result}`);
+        }
+        return AddCalendarEvent?.presentEventCreatingDialog(eventConfig);
+      })
+      .then(eventInfo => {
+        if ('eventIdentifier' in eventInfo) {
+          Alert.alert(
+            eventInfo.eventIdentifier.action,
+            'Event added to calendar',
+          );
+        }
+      })
+      .catch((e: string) => {
+        // handle error such as when user rejected permissions
+        Alert.alert('Error', e);
+      });
+  };
 
   if (loading) {
     return (
@@ -42,6 +98,7 @@ function Details({route}: DetailsScreenProps): React.JSX.Element {
       </View>
     );
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
@@ -50,7 +107,7 @@ function Details({route}: DetailsScreenProps): React.JSX.Element {
             uri: `${IMAGE_URL}${artistData?.image_id}${IMAGE_URL_PARAMS}`,
           }}
           style={styles.image}
-          resizeMode="cover"
+          resizeMode="center"
           entering={FadeIn}
           exiting={FadeOut}
         />
@@ -77,7 +134,7 @@ function Details({route}: DetailsScreenProps): React.JSX.Element {
             {getTimestamp(artistData?.timestamp)}
           </Text>
         </Animated.ScrollView>
-        <Button onPress={() => {}} text="Add to calendar" />
+        <Button onPress={addToCalendar} text="Add to calendar" />
       </View>
     </SafeAreaView>
   );
