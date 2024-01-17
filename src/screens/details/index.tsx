@@ -60,6 +60,7 @@ function Details({route}: DetailsScreenProps): React.JSX.Element {
       }),
     )
       .then(result => {
+        console.warn({result});
         if (result !== RESULTS.GRANTED) {
           throw new Error(`No permission: ${result}`);
         }
